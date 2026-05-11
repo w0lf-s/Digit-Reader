@@ -92,19 +92,19 @@ python src/predict.py --image path/to/image.png
 
 ## 📈 Results
 
-* Training Accuracy: **XX%**
-* Testing Accuracy: **XX%**
+* Training Accuracy: **86%**
+* Testing Accuracy: **83%**
 * Example prediction:
 
 | Input Image                                                                      | Predicted Digit |
 | -------------------------------------------------------------------------------- | --------------- |
-| ![sample](https://upload.wikimedia.org/wikipedia/commons/2/27/MnistExamples.png) | 5               |
+| ![sample](https://tse1.mm.bing.net/th/id/OIP.VvQJgpsa5L-zm3Y2moydQgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3) | 5               |
 
 ---
 
 ## 🔮 Future Work
 
-* Extend recognition to **0–9** (all digits).
+* Extend recognition to multiple numbers.
 * Improve accuracy with **CNNs**.
 * Deploy as a **web app** using Flask/Streamlit.
 
