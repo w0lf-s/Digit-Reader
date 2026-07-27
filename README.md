@@ -2,31 +2,38 @@
 
 # 🧠 Digit Recognition using Computer Vision
 
-This project is a **computer vision model** that recognizes handwritten digits from **1 to 9**. It demonstrates how machine learning and deep learning techniques can be applied to digit classification, making it useful for learning purposes and as a foundation for more advanced OCR (Optical Character Recognition) systems.
+This project is a **computer vision model** that recognizes handwritten digits from **0 to 9**. It demonstrates how machine learning and deep learning techniques can be applied to digit classification, making it useful for learning purposes and as a foundation for more advanced OCR (Optical Character Recognition) systems.
+
+All runnable code lives in a **single Jupyter notebook** (`Digit_Reader.ipynb`).
+
+![Python](https://img.shields.io/badge/Python-3.13-blue)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)
+![Keras](https://img.shields.io/badge/Keras-Deep%20Learning-red)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Accuracy](https://img.shields.io/badge/Test%20Accuracy-99.1%25-brightgreen)
 
 ---
 
 ## 🚀 Features
 
-* Recognizes handwritten digits **1–9**.
-* Built using **Python** and popular ML/DL libraries.
-* Preprocessing pipeline for images.
-* Trained model with good accuracy on test data.
-* Easy-to-use prediction script for testing new inputs.
+* Recognizes handwritten digits **0–9**.
+* Built using **Python**, **TensorFlow**, and **Keras**.
+* CNN with ~**99.1%** held-out MNIST test accuracy.
+* Preprocessing pipeline for custom handwritten images.
+* Automatic model save/load with early stopping.
+* Easy-to-use single notebook for training and prediction.
 
 ---
 
 ## 📂 Project Structure
 
 ```
-├── data/                  # Dataset (training/testing images)
-├── notebooks/             # Jupyter notebooks for experiments
-├── src/                   # Source code
-│   ├── model.py           # Model architecture
-│   ├── train.py           # Training script
-│   ├── predict.py         # Script to test model predictions
-├── saved_models/          # Pre-trained models
+├── assets/                # README images (samples, demo, results)
+├── Digit_Reader.ipynb     # Full train + predict pipeline
+├── Untitled.png           # Sample handwritten digit
+├── saved_models/          # Trained model (mnist.keras)
 ├── requirements.txt       # Dependencies
+├── LICENSE
 └── README.md              # Project documentation
 ```
 
@@ -37,76 +44,107 @@ This project is a **computer vision model** that recognizes handwritten digits f
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/your-username/digit-recognition.git
-   cd digit-recognition
+   git clone https://github.com/w0lf-s/Digit-Reader.git
+   cd Digit-Reader
    ```
 
-2. Create and activate a virtual environment (optional but recommended):
+2. Create and activate a virtual environment (use **Python 3.13**):
 
    ```bash
-   python -m venv venv
-   source venv/bin/activate   # For Linux/Mac
-   venv\Scripts\activate      # For Windows
+   py -3.13 -m venv .venv
+   source .venv/bin/activate   # For Linux/Mac
+   .venv\Scripts\activate      # For Windows
    ```
 
 3. Install the dependencies:
 
    ```bash
    pip install -r requirements.txt
+   python -m ipykernel install --user --name digit-reader --display-name "Digit-Reader (3.13)"
    ```
 
 ---
 
 ## 📊 Dataset
 
-* The model is trained on a dataset of handwritten digits (such as **MNIST** or custom dataset containing digits 1–9).
-* Images are preprocessed (grayscale, normalization, reshaping) before training.
+* The model is trained on **[MNIST](https://keras.io/api/datasets/mnist/)**: 60,000 training and 10,000 test grayscale images of digits **0–9**.
+* Each image is **28×28** pixels (white digit on black background).
+* Custom inputs are preprocessed (invert, thicken thin strokes, crop, center, normalize) before prediction.
+
+<p align="center">
+  <img src="./assets/mnist_samples.png" alt="MNIST dataset samples" width="100%">
+</p>
 
 ---
 
 ## 🏗️ Model Architecture
 
-* Input layer → Flattened image pixels
-* Hidden layers → Fully connected Dense layers with ReLU activation
-* Output layer → Softmax activation for 9 classes (digits 1–9)
+* Input → **28×28×1** grayscale image
+* Conv2D (32, 3×3, ReLU) → Conv2D (64, 3×3, ReLU)
+* MaxPooling (2×2) → Dropout (0.25)
+* Flatten → Dense (256, ReLU) → Dropout (0.5)
+* Softmax output for **10 classes** (digits 0–9)
 
-*(You can modify this section based on CNN/MLP if you used one)*
+<p align="center">
+  <img src="./assets/architecture.png" alt="CNN architecture" width="360">
+</p>
+
+```
+Input (28×28×1)
+   → Conv2D 32 → Conv2D 64 → MaxPool → Dropout
+   → Flatten → Dense 256 → Dropout → Softmax 10
+```
 
 ---
 
 ## 🏃 Usage
 
-### Train the model
+1. Open `Digit_Reader.ipynb`
+2. Select kernel **Digit-Reader (3.13)** (`.venv`)
+3. Run all cells top to bottom
 
-```bash
-python src/train.py
-```
+* The notebook trains the CNN (or loads `saved_models/mnist.keras` if it already exists).
+* The last cell predicts on `Untitled.png` (change `IMAGE_PATH` to try another image).
 
-### Test on sample images
-
-```bash
-python src/predict.py --image path/to/image.png
-```
+<p align="center">
+  <img src="./assets/prediction.gif" alt="Prediction demo" width="420">
+</p>
 
 ---
 
 ## 📈 Results
 
-* Training Accuracy: **86%**
-* Testing Accuracy: **83%**
+* Held-out test accuracy: **99.1%**
 * Example prediction:
 
-| Input Image                                                                      | Predicted Digit |
-| -------------------------------------------------------------------------------- | --------------- |
-| ![sample](https://tse1.mm.bing.net/th/id/OIP.VvQJgpsa5L-zm3Y2moydQgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3) | 5               |
+| Input Image | Predicted Digit |
+| --- | --- |
+| ![sample](./assets/sample_input.png) | **8** (100.00%) |
+
+<p align="center">
+  <img src="./assets/prediction_result.png" alt="Prediction result" width="520">
+</p>
+
+### Training curves
+
+<p align="center">
+  <img src="./assets/training_accuracy.png" alt="Training accuracy" width="720">
+</p>
+
+### Confusion matrix
+
+<p align="center">
+  <img src="./assets/confusion_matrix.png" alt="Confusion matrix" width="560">
+</p>
 
 ---
 
 ## 🔮 Future Work
 
-* Extend recognition to multiple numbers.
-* Improve accuracy with **CNNs**.
+* Extend recognition to multiple numbers in one image.
+* Draw digits directly in a browser UI.
 * Deploy as a **web app** using Flask/Streamlit.
+* TensorFlow Lite / mobile support.
 
 ---
 
